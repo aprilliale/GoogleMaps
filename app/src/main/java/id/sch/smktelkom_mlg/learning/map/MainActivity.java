@@ -1,5 +1,6 @@
 package id.sch.smktelkom_mlg.learning.map;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -10,21 +11,27 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
+
+import static id.sch.smktelkom_mlg.learning.map.R.id.map;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    static final CameraPosition TRENGGALEK = CameraPosition.builder()
-            .target(new LatLng(-8.0764, 111.70641)).zoom(10)
+    static final CameraPosition SEATTLE = CameraPosition.builder()
+            .target(new LatLng(47.6204, -122.2491)).zoom(10)
             .bearing(0).tilt(45)
             .build();
     GoogleMap m_map;
     boolean mapReady = false;
 
-    MarkerOptions Tugu;
-    MarkerOptions Trenggalek;
-    MarkerOptions Karangan;
+    LatLng renton = new LatLng(47.489805, -122.120502);
+    LatLng kirkland = new LatLng(47.7301986, -122.1768858);
+    LatLng everett = new LatLng(47.978748, -122.202001);
+    LatLng lynnwood = new LatLng(47.819533, -122.32288);
+    LatLng montlake = new LatLng(47.7973733, -122.3281771);
+    LatLng kent = new LatLng(47.385938, -122.258212);
+    LatLng showare = new LatLng(47.38702, -122.23986);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,17 +39,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_main);
 
 
-        Trenggalek = new MarkerOptions()
-                .position(new LatLng(-8.0764, 111.70641))
-                .title("Trenggalek");
-
-        Tugu = new MarkerOptions()
-                .position(new LatLng(-8.021430, 11.603434))
-                .title("Tugu");
-
-        Karangan = new MarkerOptions()
-                .position(new LatLng(-8.078581, 111.674157))
-                .title("Karangan");
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(map);
+        mapFragment.getMapAsync(this);
 
 //        Button btnMap = (Button) findViewById(R.id.btnMap);
 //        btnMap.setOnClickListener(new View.OnClickListener() {
@@ -71,18 +69,22 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 //            }
 //        });
 //
-        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+//        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
+//        mapFragment.getMapAsync(this);
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mapReady = true;
-        m_map = googleMap;
-        m_map.addMarker(Tugu);
-        m_map.addMarker(Trenggalek);
-        m_map.addMarker(Karangan);
-        flyTo(TRENGGALEK);
+        googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(SEATTLE));
+        //map.addPolyline(new PolylineOptions().geodesic(true).add(renton).add(kirkland).add(everett).add(lynnwood).add(montlake).add(kent).add(showare).add(renton));
+        //map.addPolygon(new PolygonOptions().add(renton, kirkland, everett, lynnwood).fillColor(Color.GREEN));
+        googleMap.addCircle(new CircleOptions()
+                .center(renton)
+                .radius(5000)
+                .strokeColor(Color.GREEN)
+                .fillColor(Color.argb(64, 0, 255, 0)));
+//        mapReady = true;
+//        m_map = googleMap;
 //        LatLng eaciit = new LatLng(-7.284790, 112.736989);
 //        CameraPosition target = CameraPosition.builder().target(eaciit).zoom(14).build();
 //        m_map.moveCamera(CameraUpdateFactory.newCameraPosition(target));
