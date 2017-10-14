@@ -4,8 +4,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -13,76 +11,38 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    static final CameraPosition Bandung = CameraPosition.builder()
-            .target(new LatLng(-6.917464, 107.619123)).zoom(21)
+    static final CameraPosition TRENGGALEK = CameraPosition.builder()
+            .target(new LatLng(-8.0764, 111.70641)).zoom(10)
             .bearing(0).tilt(45)
-            .build();
-    static final CameraPosition Jkt = CameraPosition.builder()
-            .target(new LatLng(-6.175110, 106.865039)).zoom(17)
-            .bearing(0).tilt(45)
-            .build();
-
-    //    MarkerOptions Trenggalek;
-//    MarkerOptions Malang;
-    static final CameraPosition Semarang = CameraPosition.builder()
-            .target(new LatLng(-7.005145, 110.438125)).zoom(17)
-            .bearing(90).tilt(45)
-            .build();
-    static final CameraPosition Solo = CameraPosition.builder()
-            .target(new LatLng(-7.575489, 110.824327)).zoom(17)
-            .bearing(90).tilt(45)
             .build();
     GoogleMap m_map;
     boolean mapReady = false;
+
+    MarkerOptions Tugu;
+    MarkerOptions Trenggalek;
+    MarkerOptions Karangan;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button btnSeattle = (Button) findViewById(R.id.btnSolo);
-        btnSeattle.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View view) {
-                if (mapReady)
-                    flyTo(Solo);
-            }
-        });
+        Trenggalek = new MarkerOptions()
+                .position(new LatLng(-8.0764, 111.70641))
+                .title("Trenggalek");
 
-        Button btnDublin = (Button) findViewById(R.id.btnSemarang);
-        btnDublin.setOnClickListener(new View.OnClickListener() {
+        Tugu = new MarkerOptions()
+                .position(new LatLng(-8.021430, 11.603434))
+                .title("Tugu");
 
-            @Override
-            public void onClick(View view) {
-                if (mapReady)
-                    flyTo(Semarang);
-            }
-        });
-
-        Button btnTokyo = (Button) findViewById(R.id.btnBandung);
-        btnTokyo.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                if (mapReady)
-                    flyTo(Bandung);
-            }
-        });
-
-        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-
-//        Trenggalek = new MarkerOptions()
-//                .position(new LatLng(-8.0764, 111.70641))
-//                .title("Trenggalek");
-//
-//        Malang = new MarkerOptions()
-//                .position(new LatLng(-7.966620, 112.632632))
-//                .title("Malang");
+        Karangan = new MarkerOptions()
+                .position(new LatLng(-8.078581, 111.674157))
+                .title("Karangan");
 
 //        Button btnMap = (Button) findViewById(R.id.btnMap);
 //        btnMap.setOnClickListener(new View.OnClickListener() {
@@ -111,17 +71,21 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 //            }
 //        });
 //
-//        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
-//        mapFragment.getMapAsync(this);
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mapReady = true;
         m_map = googleMap;
-        LatLng eaciit = new LatLng(-7.284790, 112.736989);
-        CameraPosition target = CameraPosition.builder().target(eaciit).zoom(14).build();
-        m_map.moveCamera(CameraUpdateFactory.newCameraPosition(target));
+        m_map.addMarker(Tugu);
+        m_map.addMarker(Trenggalek);
+        m_map.addMarker(Karangan);
+        flyTo(TRENGGALEK);
+//        LatLng eaciit = new LatLng(-7.284790, 112.736989);
+//        CameraPosition target = CameraPosition.builder().target(eaciit).zoom(14).build();
+//        m_map.moveCamera(CameraUpdateFactory.newCameraPosition(target));
     }
 
     @Override
@@ -147,6 +111,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void flyTo(CameraPosition target) {
-        m_map.animateCamera(CameraUpdateFactory.newCameraPosition(target), 10000, null);
+        m_map.moveCamera(CameraUpdateFactory.newCameraPosition(target));
     }
 }
